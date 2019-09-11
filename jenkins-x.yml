@@ -6,6 +6,8 @@ pipelineConfig:
         agent:
           image: gcr.io/jenkinsxio/builder-go-maven
         environment:
+          - name: XDG_CONFIG_HOME
+            value: /workspace/gitconfig
           - name: GIT_AUTHOR_NAME
             value: jenkins-x-bot
           - name: GIT_AUTHOR_EMAIL
