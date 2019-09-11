@@ -132,7 +132,10 @@ all: test
 
 check: fmt test
 
-bdd: test
+bdd-init:
+	echo "About to run the BDD tests on the current cluster"
+
+bdd: bdd-init bootstrap test
 
 test: info
 	$(GINKGO) --slowSpecThreshold=$(SLOW_SPEC_THRESHOLD)
