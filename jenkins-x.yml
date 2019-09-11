@@ -6,8 +6,9 @@ pipelineConfig:
          # TODO this avoids a meta pipeline core dump
          agent:
            image: gcr.io/jenkinsxio/builder-go-maven
-      build:
-        steps:
-        - name: bdd
-          command: make bdd
-          image: gcr.io/jenkinsxio/builder-go-maven
+      stages:
+        - name: bdd-stage
+          steps:
+          - name: bdd
+            command: make bdd
+            image: gcr.io/jenkinsxio/builder-go-maven
