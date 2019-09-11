@@ -132,6 +132,8 @@ all: test
 
 check: fmt test
 
+bdd: test
+
 test: info
 	$(GINKGO) --slowSpecThreshold=$(SLOW_SPEC_THRESHOLD)
 
