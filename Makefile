@@ -58,3 +58,9 @@ test-devpod:
 #targets for individual quickstarts
 test-quickstart-golang-http:
 	$(GO) test $(TESTFLAGS) ./test/suite/quickstart -ginkgo.focus=golang-http
+
+bdd-init:
+	echo "About to run the BDD tests on the current cluster"
+
+bdd: bdd-init bootstrap test
+
