@@ -62,5 +62,5 @@ test-quickstart-golang-http:
 bdd-init:
 	echo "About to run the BDD tests on the current cluster"
 
-bdd: bdd-init bootstrap test
+bdd: bdd-init test-create-spring
 
