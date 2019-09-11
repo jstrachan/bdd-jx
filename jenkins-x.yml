@@ -1,0 +1,9 @@
+buildPack: none
+pipelineConfig:
+  pipelines:
+    release:
+      build:
+        steps:
+        - name: bdd
+          command: make bdd
+          image: gcr.io/jenkinsxio/builder-go-maven
