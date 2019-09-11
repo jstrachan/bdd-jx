@@ -2,6 +2,10 @@ buildPack: none
 pipelineConfig:
   pipelines:
     release:
+      pipeline:
+         # TODO this avoids a meta pipeline core dump
+         agent:
+           image: gcr.io/jenkinsxio/builder-go-maven
       build:
         steps:
         - name: bdd
