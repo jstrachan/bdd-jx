@@ -5,21 +5,17 @@ pipelineConfig:
       pipeline:
         agent:
           image: gcr.io/jenkinsxio/builder-go-maven
-        environment:
-          - name: XDG_CONFIG_HOME
-            value: /workspace/gitconfig
-          - name: GIT_AUTHOR_NAME
-            value: jenkins-x-bot
-          - name: GIT_AUTHOR_EMAIL
-            value: jenkins-x@googlegroups.com
         stages:
           - name: bdd-stage
             steps:
-              - name: git-cfg
-                command: git config --global credential.helper store
-              - name: git-init
-                command: jx step git validate
-              - name: git-cred
-                command: jx step git credentials
               - name: bdd
                 command: make bdd
+                env:
+                - name: HOME
+                  value: /workspace/home
+                - name: XDG_CONFIG_HOME
+                  value: /workspace/gitconfig
+                - name: GIT_AUTHOR_NAME
+                  value: jenkins-x-bot
+                - name: GIT_AUTHOR_EMAIL
+                  value: jenkins-x@googlegroups.com

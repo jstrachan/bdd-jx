@@ -61,6 +61,9 @@ test-quickstart-golang-http:
 
 bdd-init:
 	echo "About to run the BDD tests on the current cluster"
+	git config --global credential.helper store
+	jx step git validate
+	jx step git credentials
 
 bdd: bdd-init test-create-spring
 
