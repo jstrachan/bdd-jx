@@ -126,7 +126,9 @@ func ensureConfiguration() error {
 		if err != nil {
 			return errors.Wrapf(errors.WithStack(err), "failed to find gitOrganisation in namespace %s", ns)
 		}
-		gitOrganisation = "jenkins-x-tests"
+		if gitOrganisation == "" {
+			gitOrganisation = "jenkins-x-tests"
+		}
 		os.Setenv("GIT_ORGANISATION", gitOrganisation)
 	}
 	gitProviderUrl := os.Getenv("GIT_PROVIDER_URL")
@@ -226,10 +228,12 @@ func findDefaultOrganisation(kubeClient kubernetes.Interface, jxClient versioned
 	// lets see if we have defined a team environment
 	devEnv, err := kube.GetDevEnvironment(jxClient, ns)
 	if err != nil {
+		fmt.Printf("failed to find the dev environment in namespace %s due to %s\n", ns, err.Error())
 		utils.LogInfof("failed to find the dev environment in namespace %s due to %s", ns, err.Error())
 	}
+	answer := ""
 	if devEnv != nil {
-		answer := devEnv.Spec.TeamSettings.Organisation
+		answer = devEnv.Spec.TeamSettings.Organisation
 		if answer == "" {
 			answer = devEnv.Spec.TeamSettings.PipelineUsername
 		}
@@ -237,6 +241,8 @@ func findDefaultOrganisation(kubeClient kubernetes.Interface, jxClient versioned
 			return answer, nil
 		}
 	}
+	fmt.Printf("found organisation in namespace %s due to %s\n", ns, answer)
+	utils.LogInfof("found organisation in namespace %s due to %s\n", ns, answer)
 
 	// TODO load the user from the git secrets?
 	return "", nil
