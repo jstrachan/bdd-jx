@@ -64,6 +64,9 @@ bdd-init:
 	git config --global credential.helper store
 	jx step git validate
 	jx step git credentials
+	env | sort
+	ls -al ~
+	cat ~/.gitconfig
 
 bdd: bdd-init test-create-spring
 
