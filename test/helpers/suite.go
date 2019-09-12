@@ -9,9 +9,13 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/jenkins-x/jx/pkg/client/clientset/versioned"
+	"github.com/jenkins-x/jx/pkg/jx/cmd/clients"
+	"github.com/jenkins-x/jx/pkg/kube"
 	"github.com/onsi/ginkgo/config"
 	"github.com/onsi/ginkgo/reporters/stenographer"
-	colorable "github.com/onsi/ginkgo/reporters/stenographer/support/go-colorable"
+	"github.com/onsi/ginkgo/reporters/stenographer/support/go-colorable"
+	"k8s.io/client-go/kubernetes"
 
 	"github.com/jenkins-x/bdd-jx/test/utils"
 	"github.com/jenkins-x/bdd-jx/test/utils/runner"
@@ -106,8 +110,22 @@ func ensureConfiguration() error {
 	if err != nil {
 		return errors.WithStack(err)
 	}
+	factory := clients.NewFactory()
+	kubeClient, ns, err := factory.CreateKubeClient()
+	if err != nil {
+		return errors.Wrap(errors.WithStack(err), "failed to create kubeClient")
+	}
+	jxClient, _, err := factory.CreateJXClient()
+	if err != nil {
+		return errors.Wrap(errors.WithStack(err), "failed to create jxClient")
+	}
+
 	gitOrganisation := os.Getenv("GIT_ORGANISATION")
 	if gitOrganisation == "" {
+		gitOrganisation, err = findDefaultOrganisation(kubeClient, jxClient, ns)
+		if err != nil {
+			return errors.Wrapf(errors.WithStack(err), "failed to find gitOrganisation in namespace %s", ns)
+		}
 		gitOrganisation = "jenkins-x-tests"
 		os.Setenv("GIT_ORGANISATION", gitOrganisation)
 	}
@@ -202,4 +220,21 @@ func ensureConfiguration() error {
 	utils.LogInfof("GHE_TOKEN:                                          %s\n", os.Getenv("GHE_TOKEN"))
 	utils.LogInfof("GHE_PROVIDER_URL:                                   %s\n", os.Getenv("GHE_PROVIDER_URL"))
 	return nil
+}
+
+func findDefaultOrganisation(kubeClient kubernetes.Interface, jxClient versioned.Interface, ns string) (string, error) {
+	// lets see if we have defined a team environment
+	devEnv, err := kube.GetDevEnvironment(jxClient, ns)
+	if err != nil {
+		utils.LogInfof("failed to find the dev environment in namespace %s due to %s", ns, err.Error())
+	}
+	if devEnv != nil {
+		answer := devEnv.Spec.TeamSettings.Organisation
+		if answer != "" {
+			return answer, nil
+		}
+	}
+
+	// TODO load the user from the git secrets?
+	return "", nil
 }
