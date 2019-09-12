@@ -190,6 +190,15 @@ func ensureConfiguration() error {
 	if bddTimeoutDevpod == "" {
 		os.Setenv("BDD_TIMEOUT_DEVPOD", "15")
 	}
+	if os.Getenv("BDD_TIMEOUT_BUILD_RUNNING_IN_STAGING") == "" {
+		os.Setenv("BDD_TIMEOUT_BUILD_RUNNING_IN_STAGING", "60")
+	}
+	if os.Getenv("BDD_TIMEOUT_PIPELINE_ACTIVITY_COMPLETE") == "" {
+		os.Setenv("BDD_TIMEOUT_PIPELINE_ACTIVITY_COMPLETE", "60")
+	}
+	if os.Getenv("BDD_TIMEOUT_PREVIEW_URL_RETURNS") == "" {
+		os.Setenv("BDD_TIMEOUT_PREVIEW_URL_RETURNS", "60")
+	}
 
 	gheUser := os.Getenv("GHE_USER")
 	if gheUser == "" {
@@ -202,25 +211,28 @@ func ensureConfiguration() error {
 		os.Setenv("GHE_PROVIDER_URL", gheProviderUrl)
 	}
 
-	utils.LogInfof("jx version:                                         %s\n", version)
-	utils.LogInfof("QUIET logging mode:                                 %s\n", quiet)
-	utils.LogInfof("GIT_ORGANISATION:                                   %s\n", gitOrganisation)
-	utils.LogInfof("GIT_PROVIDER_URL:                                   %s\n", gitProviderUrl)
-	utils.LogInfof("JX_DISABLE_DELETE_APP:                              %s\n", disableDeleteApp)
-	utils.LogInfof("JX_DISABLE_DELETE_REPO:                             %s\n", disableDeleteRepo)
-	utils.LogInfof("JX_DISABLE_WAIT_FOR_FIRST_RELEASE:                  %s\n", disableWaitForFirstRelease)
-	utils.LogInfof("JX_BDD_INCLUDE_APPS:                                %s\n", includeApps)
-	utils.LogInfof("BDD_TIMEOUT_BUILD_COMPLETES timeout value:          %s\n", os.Getenv("BDD_TIMEOUT_BUILD_COMPLETES"))
-	utils.LogInfof("BDD_TIMEOUT_BUILD_RUNNING_IN_STAGING timeout value: %s\n", os.Getenv("BDD_TIMEOUT_BUILD_RUNNING_IN_STAGING"))
-	utils.LogInfof("BDD_TIMEOUT_URL_RETURNS timeout value:              %s\n", os.Getenv("BDD_TIMEOUT_URL_RETURNS"))
-	utils.LogInfof("BDD_TIMEOUT_CMD_LINE timeout value:                 %s\n", os.Getenv("BDD_TIMEOUT_CMD_LINE"))
-	utils.LogInfof("BDD_TIMEOUT_APP_TESTS timeout value:                %s\n", os.Getenv("BDD_TIMEOUT_APP_TESTS"))
-	utils.LogInfof("BDD_TIMEOUT_SESSION_WAIT timeout value:             %s\n", os.Getenv("BDD_TIMEOUT_SESSION_WAIT"))
-	utils.LogInfof("BDD_TIMEOUT_DEVPOD timeout value:             	   %s\n", os.Getenv("BDD_TIMEOUT_DEVPOD"))
-	utils.LogInfof("SLOW_SPEC_THRESHOLD:                                %s\n", os.Getenv("SLOW_SPEC_THRESHOLD"))
-	utils.LogInfof("GHE_USER:                                           %s\n", os.Getenv("GHE_USER"))
-	utils.LogInfof("GHE_TOKEN:                                          %s\n", os.Getenv("GHE_TOKEN"))
-	utils.LogInfof("GHE_PROVIDER_URL:                                   %s\n", os.Getenv("GHE_PROVIDER_URL"))
+	utils.LogInfof("jx version:                                           %s\n", version)
+	utils.LogInfof("QUIET logging mode:                                   %s\n", quiet)
+	utils.LogInfof("GIT_ORGANISATION:                                     %s\n", gitOrganisation)
+	utils.LogInfof("GIT_PROVIDER_URL:                                     %s\n", gitProviderUrl)
+	utils.LogInfof("JX_DISABLE_DELETE_APP:                                %s\n", disableDeleteApp)
+	utils.LogInfof("JX_DISABLE_DELETE_REPO:                               %s\n", disableDeleteRepo)
+	utils.LogInfof("JX_DISABLE_WAIT_FOR_FIRST_RELEASE:                    %s\n", disableWaitForFirstRelease)
+	utils.LogInfof("JX_BDD_INCLUDE_APPS:                                  %s\n", includeApps)
+	utils.LogInfof("BDD_TIMEOUT_BUILD_COMPLETES timeout value:            %s\n", os.Getenv("BDD_TIMEOUT_BUILD_COMPLETES"))
+	utils.LogInfof("BDD_TIMEOUT_BUILD_RUNNING_IN_STAGING timeout value:   %s\n", os.Getenv("BDD_TIMEOUT_BUILD_RUNNING_IN_STAGING"))
+	utils.LogInfof("BDD_TIMEOUT_URL_RETURNS timeout value:                %s\n", os.Getenv("BDD_TIMEOUT_URL_RETURNS"))
+	utils.LogInfof("BDD_TIMEOUT_CMD_LINE timeout value:                   %s\n", os.Getenv("BDD_TIMEOUT_CMD_LINE"))
+	utils.LogInfof("BDD_TIMEOUT_APP_TESTS timeout value:                  %s\n", os.Getenv("BDD_TIMEOUT_APP_TESTS"))
+	utils.LogInfof("BDD_TIMEOUT_SESSION_WAIT timeout value:               %s\n", os.Getenv("BDD_TIMEOUT_SESSION_WAIT"))
+	utils.LogInfof("BDD_TIMEOUT_BUILD_RUNNING_IN_STAGING timeout value:   %s\n", os.Getenv("BDD_TIMEOUT_BUILD_RUNNING_IN_STAGING"))
+	utils.LogInfof("BDD_TIMEOUT_PIPELINE_ACTIVITY_COMPLETE timeout value: %s\n", os.Getenv("BDD_TIMEOUT_PIPELINE_ACTIVITY_COMPLETE"))
+	utils.LogInfof("BDD_TIMEOUT_PREVIEW_URL_RETURNS timeout value:        %s\n", os.Getenv("BDD_TIMEOUT_PREVIEW_URL_RETURNS"))
+	utils.LogInfof("BDD_TIMEOUT_DEVPOD timeout value:             	      %s\n", os.Getenv("BDD_TIMEOUT_DEVPOD"))
+	utils.LogInfof("SLOW_SPEC_THRESHOLD:                                  %s\n", os.Getenv("SLOW_SPEC_THRESHOLD"))
+	utils.LogInfof("GHE_USER:                                             %s\n", os.Getenv("GHE_USER"))
+	utils.LogInfof("GHE_TOKEN:                                            %s\n", os.Getenv("GHE_TOKEN"))
+	utils.LogInfof("GHE_PROVIDER_URL:                                     %s\n", os.Getenv("GHE_PROVIDER_URL"))
 	return nil
 }
 
