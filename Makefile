@@ -6,6 +6,7 @@ PACKAGE_DIRS = $(shell $(GO) list ./test/...)
 BUILDFLAGS :=
 
 TESTFLAGS ?= -v
+TESTSUFFIXFLAGS ?= -ginkgo.v
 
 ifdef DEBUG
 BUILDFLAGS += -gcflags "all=-N -l" $(BUILDFLAGS)
@@ -34,32 +35,32 @@ install:
 	echo "deprecated"
 
 test-import:
-	$(GO) test $(TESTFLAGS) ./test/suite/_import
+	$(GO) test $(TESTFLAGS) ./test/suite/_import $(TESTSUFFIXFLAGS)
 
 test-app-lifecycle:
-	$(GO) test $(TESTFLAGS) ./test/suite/apps
+	$(GO) test $(TESTFLAGS) ./test/suite/apps $(TESTSUFFIXFLAGS)
 
 test-verify-pods:
-	$(GO) test $(TESTFLAGS) ./test/suite/step
+	$(GO) test $(TESTFLAGS) ./test/suite/step $(TESTSUFFIXFLAGS)
 
 test-create-spring:
-	$(GO) test $(TESTFLAGS) ./test/suite/spring
+	$(GO) test $(TESTFLAGS) ./test/suite/spring $(TESTSUFFIXFLAGS)
 
 test-upgrade-ingress:
-	$(GO) test $(TESTFLAGS) ./test/suite/ingress
+	$(GO) test $(TESTFLAGS) ./test/suite/ingress $(TESTSUFFIXFLAGS)
 
 test-upgrade-platform:
-	$(GO) test $(TESTFLAGS) ./test/suite/platform
+	$(GO) test $(TESTFLAGS) ./test/suite/platform $(TESTSUFFIXFLAGS)
 
 test-supported-quickstarts:
-	JX_BDD_QUICKSTARTS= $(GO) test $(TESTFLAGS) ./test/suite/quickstart -ginkgo.focus=(node-http|spring-boot-http-gradle|golang-http)
+	JX_BDD_QUICKSTARTS= $(GO) test $(TESTFLAGS) ./test/suite/quickstart -ginkgo.focus=(node-http|spring-boot-http-gradle|golang-http) $(TESTSUFFIXFLAGS)
 
 test-devpod:
-	$(GO) test $(TESTFLAGS) ./test/suite/devpods
+	$(GO) test $(TESTFLAGS) ./test/suite/devpods $(TESTSUFFIXFLAGS)
 
 #targets for individual quickstarts
 test-quickstart-golang-http:
-	$(GO) test $(TESTFLAGS) ./test/suite/quickstart -ginkgo.focus=golang-http
+	$(GO) test $(TESTFLAGS) ./test/suite/quickstart -ginkgo.focus=golang-http $(TESTSUFFIXFLAGS)
 
 bdd-init:
 	echo "About to run the BDD tests on the current cluster"
