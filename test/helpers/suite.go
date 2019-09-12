@@ -230,6 +230,9 @@ func findDefaultOrganisation(kubeClient kubernetes.Interface, jxClient versioned
 	}
 	if devEnv != nil {
 		answer := devEnv.Spec.TeamSettings.Organisation
+		if answer == "" {
+			answer = devEnv.Spec.TeamSettings.PipelineUsername
+		}
 		if answer != "" {
 			return answer, nil
 		}
